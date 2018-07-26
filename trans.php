@@ -24,17 +24,17 @@
  * @version     v0.1
  * @link        http://www.github.com/TimZ99/phpservermon-language/
  * 
- * @todo add form to html
- * @todo add submit button
+ * @todo finish form to html
  * @todo save changes
  * @todo finish documentation
+ * @todo author
  **/
 //debug
 ini_set('display_errors', 1);
 error_reporting(E_USER_ERROR);
 
 //settings
-$path = '../../phpservermon/src/lang';
+$path = 'src/lang';
 $translationLang = 'nl_NL.lang.php';
 
 //get files in folder
@@ -132,11 +132,24 @@ function displayHTML(array $default, array $translation, int $px){
  * @todo check input
  * @todo write result to file or textarea if permission is to low
  */ 
-function saveTranslation(){
+function saveTranslation($path, $translationLang){
+    modifyFile($path, $translationLang);
+}
+
+function modifyFile($path, $translationLang){
+    strpos(file_get_contents($path."/".$translationLang), '$sm_lang');
+    
+}
+
+function clean(){
 
 }
 
+if(isset($_POST)){
+    saveTranslation($path, $translationLang, clean($_POST));
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -164,8 +177,11 @@ function saveTranslation(){
         <input style="margin:5px 12px 0px 0px;" value="Default">
         <input style="margin:5px 12px 0px 0px;" value="Translation">
         <br><br><br>
+        <form method="POST">
         <?php 
         displayHTML($default, $translation, 0); 
         ?>
+        <button type="submit" style="width: 50vw; height: 50px; border-radius: 10px; background-color: rgb(75, 205, 20); border: black 1px solid; color: white; font-size: 15px; margin: 24px 25vw;">Save translation</button>
+        </form>
     </body>
 </html>
