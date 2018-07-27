@@ -17,15 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with PHP Server Monitor.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package     phpservermon-language
+ * @package     Phpservermon-Language-Editor
  * @author      Tim Zandbergen <Tim@Xervion.nl>
  * @copyright   Copyright (c) 2018 Tim Zandbergen <Tim@Xervion.nl>
  * @license     http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version     v0.3
+ * @version     v0.4
  * @link        http://www.github.com/TimZ99/phpservermon-language/
  * 
- * @todo finish documentation
  * @todo menu to select the translation file
+ * @todo Feature: export directly to Github
  **/
 
 //debug
@@ -33,14 +33,37 @@ ini_set('display_errors', 1);
 error_reporting(E_USER_ERROR);
 //error_reporting(E_ALL);
 
-//settings
+///////////////////////////////////////
+// settings
+///////////////////////////////////////
+/**
+ * Path to language directory.
+ * Format: src/lang
+ * @var string
+ */ 
 $path = '../phpservermon-dev/src/lang';
+
+/**
+ * Name of translation file.
+ * Format: xx_XX.lang.php
+ * @var string
+ */ 
 $translationLang = 'nl_NL.lang.php';
 
-//get files in folder
+///////////////////////////////////////
+// end settings
+///////////////////////////////////////
+
+/**
+ * Get the names of the files in the directory.
+ * @var array|boolean
+ */ 
 $files = scandir($path);
 
-//disable input fields
+/**
+ * Disable input field if the input can not be saved.
+ * @var string
+ */
 $disable = "";
 
 //check if path is directory
@@ -66,11 +89,20 @@ if(!is_readable($path."/".$translationLang)){
 
 //get content of default lang
 include($path.'/en_US.lang.php');
+/**
+ * Containing all default translations.
+ * Default: en_US.
+ * @var array
+ */
 $default = $sm_lang;
 unset($sm_lang);
 
 //get content of translated lang
 include($path."/".$translationLang);
+/**
+ * Containing all translations from translation file.
+ * @var array
+ */
 $translation = $sm_lang;
 unset($sm_lang);
 
@@ -119,6 +151,8 @@ function displayHTML(array $default, array $translation, string $prevKey = '', i
 
     global $disable;
 
+    //foreach key check if value is an array -> run function again with that array
+    //else echo input -> key, default, translation
     foreach($default as $key => $value){
         $key = processValue($key);
 
@@ -132,11 +166,9 @@ function displayHTML(array $default, array $translation, string $prevKey = '', i
         $trans = '';
         $style = $empty;
 
-        /**
-         * If key doesn't exists in translation -> border red.
-         * If translation and default are the same -> border orange.
-         * Else -> border default.
-         */
+        //if key doesn't exists in translation -> border red
+        //if translation and default are the same -> border orange
+        //else -> border default
         if(array_key_exists($key, $translation) && !empty($translation[$key])){
             $trans = processValue($translation[$key]);
             $style = '';
@@ -149,6 +181,7 @@ function displayHTML(array $default, array $translation, string $prevKey = '', i
         echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\" type=\"text\" value=\"$key\" $disable>\n\t";
         echo "<input style=\"margin:5px 12px 0px 0px;\" type=\"text\" value=\"$value\" $disable>\n\t";
 
+        //if key is nested -> change key to main|nested
         if($prevKey != ''){
             $key = $prevKey."|".$key;
         }
@@ -158,7 +191,8 @@ function displayHTML(array $default, array $translation, string $prevKey = '', i
 }
 
 /**
- * Save translation
+ * Save translation.
+ * Create array from input.
  * @todo add option to show output using textarea
  * @return string
  */ 
@@ -187,6 +221,13 @@ function saveTranslation(){
     return modifyFile($content);
 }
 
+/**
+ * Change array to string.
+ * Add license and documentation to content.
+ * Make content ready to add to the translation file.
+ * @param array $array Contains processed input.
+ * @return string
+ */
 function createContentForSave(array $array){
     $content = "\$sm_lang = array(\n";
     foreach($array as $key => $value){
