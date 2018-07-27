@@ -21,23 +21,27 @@
  * @author      Tim Zandbergen <Tim@Xervion.nl>
  * @copyright   Copyright (c) 2018 Tim Zandbergen <Tim@Xervion.nl>
  * @license     http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version     v0.2.1
+ * @version     v0.3
  * @link        http://www.github.com/TimZ99/phpservermon-language/
  * 
- * @todo save changes
  * @todo finish documentation
+ * @todo menu to select the translation file
  **/
 
 //debug
 ini_set('display_errors', 1);
 error_reporting(E_USER_ERROR);
+//error_reporting(E_ALL);
 
 //settings
-$path = 'lang';
+$path = '../phpservermon-dev/src/lang';
 $translationLang = 'nl_NL.lang.php';
 
 //get files in folder
 $files = scandir($path);
+
+//disable input fields
+$disable = "";
 
 //check if path is directory
 if(!$files){
@@ -66,9 +70,20 @@ $default = $sm_lang;
 unset($sm_lang);
 
 //get content of translated lang
-include($path.'/'.$translationLang);
+include($path."/".$translationLang);
 $translation = $sm_lang;
 unset($sm_lang);
+
+/**
+ * Making sure the value won't break the file.
+ * @param string $value Value to be processed.
+ * @return string
+ */
+function processValue(string $value){
+    $value = htmlspecialchars($value);
+    $value = preg_replace("/([\']|['])(.*)([\']|['])/", "\'$2\'", $value);
+    return $value;
+}
 
 /**
  * Display the default language and translation.
@@ -102,47 +117,92 @@ function displayHTML(array $default, array $translation, string $prevKey = '', i
      */
     $style = '';
 
+    global $disable;
+
     foreach($default as $key => $value){
+        $key = processValue($key);
+
         if(is_array($value)){
-            echo "<input style=\"margin:5px 12px 0px ".$px."px;\" name=\"$key\" type=\"text\" value=\"".htmlspecialchars($key)."\"><br>\n\t";
+            echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\" type=\"text\" value=\"$key\" $disable><br>\n\t";
             displayHTML($value, $translation[$key], $key, 24);
+            continue;
         }
-        else{
-            $trans = '';
-            $style = $empty;
-            /**
-             * Check if key exists in translation.
-             * No -> border red.
-             */
-            if(array_key_exists($key, $translation)){
-                $trans = $translation[$key];
-                $style = "";
 
-                if($trans == $value){
-                    $style = $same;
-                }
+        $value = processValue($value);
+        $trans = '';
+        $style = $empty;
+
+        /**
+         * If key doesn't exists in translation -> border red.
+         * If translation and default are the same -> border orange.
+         * Else -> border default.
+         */
+        if(array_key_exists($key, $translation) && !empty($translation[$key])){
+            $trans = processValue($translation[$key]);
+            $style = '';
+
+            if($trans == $value){
+                $style = $same;
             }
-            echo "<input style=\"margin:5px 12px 0px ".$px."px;\" type=\"text\" value=\"".htmlspecialchars($key)."\">\n\t";
-            echo "<input style=\"margin:5px 12px 0px ".$px."px;\" type=\"text\" value=\"".htmlspecialchars($value)."\">\n\t";
-
-            if($prevKey != ''){
-                $key = $prevKey.".".$key;
-            }
-
-            echo "<input style=\"$style\" type=\"text\" name=\"$key\" value=\"".htmlspecialchars($trans)."\"><br>\n\t";
         }
+
+        echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\" type=\"text\" value=\"$key\" $disable>\n\t";
+        echo "<input style=\"margin:5px 12px 0px 0px;\" type=\"text\" value=\"$value\" $disable>\n\t";
+
+        if($prevKey != ''){
+            $key = $prevKey."|".$key;
+        }
+
+        echo "<input style=\"margin:5px 0px 0px 0px; $style\" type=\"text\" name=\"$key\" value=\"$trans\" $disable><br>\n\t";
     }
 }
 
 /**
  * Save translation
  * @todo add option to show output using textarea
- * @todo create new content
  * @return string
  */ 
 function saveTranslation(){
+    $array = array();
+    foreach ($_POST as $key => $value) {
+        if($key == "submit"){
+            continue;
+        }
+        if(empty($value)){
+            continue;
+        }
 
+        $containsSub = strpos($key, '|');
+
+        if($containsSub === false){
+            $array[$key] = $value;
+            continue;
+        }
+        $main = substr($key,0,$containsSub);
+        $sub = substr($key,$containsSub+1);
+        array_key_exists($main, $array) ? $array[$main][$sub] = $value : $array[$main] = array($sub => $value);
+        
+    }
+    $content = createContentForSave($array);
     return modifyFile($content);
+}
+
+function createContentForSave(array $array){
+    $content = "\$sm_lang = array(\n";
+    foreach($array as $key => $value){
+        
+        if(is_array($value)){
+            $content .= "\t'$key' => array(\n";
+            foreach($array[$key] as $nestedKey => $nestedValue){
+                $content .= "\t\t'$nestedKey' => '$nestedValue',\n";
+            }
+            $content .= "\t),\n";
+            continue;
+        }
+        $content .= "\t'$key' => '$value',\n";
+    }
+    $content .= ");";
+    return $content;
 }
 
 /**
@@ -156,7 +216,7 @@ function modifyFile($newContent = ''){
     global $translationLang;
     $currentContent = file_get_contents($path."/".$translationLang);
     $licenseAndDocs = substr($currentContent,0,strpos($currentContent, '$sm_lang'));
-    file_put_contents($path.$translationLang, $licenseAndDocs."\n".$newContent);
+    file_put_contents($path."/".$translationLang, $licenseAndDocs.$newContent);
     return "Success";
 }
 
@@ -168,12 +228,14 @@ function modifyFile($newContent = ''){
 function checkForSave(){
     global $path;
     global $translationLang;
-    $message = false;
+    global $disable;
+    $message = false; 
     $messageBox = "<div style=\"width:50vw; margin-left:25vw; padding:12px; border:black 1px solid; border-radius:5px;\">";
 
-    if (!is_writable($path.$translationLang)) {
+    if (!is_writable($path."/".$translationLang)) {
         $message = true;
-        $messageBox .= "<b>File not writable.</b><br>Permission: ".substr(sprintf('%o', fileperms($path.$translationLang)), -4).".<br>Should be 0666.";
+        $messageBox .= "<b style=\"color:red;\">File not writable.</b><br>Permission: ".substr(sprintf('%o', fileperms($path."/".$translationLang)), -4).".<br>Should be 0666.<br>Unix: chmod 0666 $path.$translationLang";
+        $disable = "disabled";
     }
     if(isset($_POST["submit"])){
         $message = true;
@@ -192,15 +254,22 @@ function checkForSave(){
         PSMLE - <?php echo $translationLang; ?>
         </title>
         <style>
+            html, body{
+                overflow-x:hidden;
+                font-family: system-ui;
+                margin: 0px 0px 0px 1vw;
+            }
             input{width:30vw;} 
             ul{list-style-type: circle;}
             button{
-                width: 50vw; height: 50px;
+                width: 49vw; 
+                height: 50px;
                 border-radius: 10px;
                 background-color: rgb(75, 205, 20);
                 border: black 1px solid;
-                color: white; font-size: 15px;
-                margin: 24px 25vw;
+                color: white; 
+                font-size: 15px;
+                margin: 24px 0px 24px 24vw;
             }
             button:active{background-color: rgb(43, 117, 12);}
             button:hover{background-color: rgb(61, 166, 16);}
@@ -225,9 +294,9 @@ function checkForSave(){
         <?php
         echo checkForSave();
         ?>
-        <input style="margin:5px 12px 0px 0px;" value="Key">
-        <input style="margin:5px 12px 0px 0px;" value="Default">
-        <input style="margin:5px 12px 0px 0px;" value="Translation">
+        <input style="margin:5px 12px 0px 0px; width:15vw;" value="Key" readonly>
+        <input style="margin:5px 12px 0px 0px;" value="Default" readonly>
+        <input style="margin:5px 12px 0px 0px;" value="Translation" readonly>
         <br><br><br>
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <?php 
