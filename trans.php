@@ -21,7 +21,7 @@
  * @author      Tim Zandbergen <Tim@Xervion.nl>
  * @copyright   Copyright (c) 2018 Tim Zandbergen <Tim@Xervion.nl>
  * @license     http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version     v0.2
+ * @version     v0.2.1
  * @link        http://www.github.com/TimZ99/phpservermon-language/
  * 
  * @todo save changes
@@ -173,7 +173,7 @@ function checkForSave(){
 
     if (!is_writable($path.$translationLang)) {
         $message = true;
-        $messageBox .= "<b>File not writable.</b><br>Permission: ".substr(sprintf('%o', fileperms($path."/test.php")), -4).".<br>Should be 0666.";
+        $messageBox .= "<b>File not writable.</b><br>Permission: ".substr(sprintf('%o', fileperms($path.$translationLang)), -4).".<br>Should be 0666.";
     }
     if(isset($_POST["submit"])){
         $message = true;
