@@ -1,4 +1,5 @@
 # PHP Server Monitor Language Editor (PSMLE)
+[![Build Status](https://travis-ci.org/TimZ99/phpservermon-language-editor.svg?branch=master)](https://travis-ci.org/TimZ99/phpservermon-language-editor)
 
 Helps to maintain the translations files of PHP Server Monitor. PHP Server Monitor is translated into more than 20 languages. This is great, but it makes it way harder to keep all of the translations up to date. This script provides a clear view of the values that not yet have a translation in an effort to keep all the translations up to date!
 
