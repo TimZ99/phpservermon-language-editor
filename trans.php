@@ -21,8 +21,8 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright Copyright (c) 2018, Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.5
- * @link      http://www.github.com/TimZ99/phpservermon-language/
+ * @version   0.5.1
+ * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
  * @todo Feature: export directly to Github
