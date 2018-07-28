@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP Server Monitor Language Editor
- * Helps maintaining the translations files of PHP Server Monitor.
+ * Helps to maintain the translations files of PHP Server Monitor.
  *
  * This file is part of PHP Server Monitor Language Editor (PSMLE).
  * PHP Server Monitor Language Editor is free software: you can redistribute
@@ -21,7 +21,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright Copyright (c) 2018, Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.5.1
+ * @version   0.5.2
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
