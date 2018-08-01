@@ -16,12 +16,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with PHP Server Monitor.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * PHP versions 4, 5, 7 supported
  *
+ * @category  PHP
  * @package   Phpservermon-Language-Editor
  * @author    Tim Zandbergen <Tim@Xervion.nl>
- * @copyright Copyright (c) 2018, Tim Zandbergen
+ * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.5.2
+ * @version   0.6
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
@@ -181,7 +184,7 @@ function displayHTML(
 
         if (is_array($value)) {
             echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\"
-                type=\"text\" value=\"$key\" $disable><br>\n\t";
+            tabindex=\"-1\" type=\"text\" value=\"$key\" $disable><br>\n\t";
             displayHTML($value, $translation[$key], $key, 24);
             continue;
         }
@@ -203,9 +206,9 @@ function displayHTML(
         }
 
         echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\"
-            type=\"text\" value=\"$key\" $disable>\n\t";
-        echo "<input style=\"margin:5px 12px 0px 0px;\"
-            type=\"text\" value=\"$value\" $disable>\n\t";
+        type=\"text\" tabindex=\"-1\" value=\"$key\" $disable>\n\t";
+        echo "<input style=\"margin:5px 12px 0px 0px;\" type=\"text\"
+        tabindex=\"-1\" value=\"$value\" $disable>\n\t";
 
         //if key is nested -> change key to main|nested
         if ($prevKey != '') {
@@ -383,9 +386,12 @@ function checkForSave()
         <?php
         echo checkForSave();
         ?>
-        <input style="margin:5px 12px 0px 0px; width:15vw;" value="Key" readonly>
-        <input style="margin:5px 12px 0px 0px;" value="Default" readonly>
-        <input style="margin:5px 12px 0px 0px;" value="Translation" readonly>
+        <input style="margin:5px 12px 0px 0px; width:15vw;" value="Key"
+            tabindex="-1" readonly>
+        <input style="margin:5px 12px 0px 0px;" value="Default"
+            tabindex="-1" readonly>
+        <input style="margin:5px 12px 0px 0px;" value="Translation"
+            tabindex="-1" readonly>
         <br><br><br>
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <?php 
