@@ -1,4 +1,7 @@
 {
+    "name": "timz99/phpservermon-language-editor",
+    "description": "Helps to maintain the translations files of PHP Server Monitor.",
+    "license": "GPL-3.0-or-later",
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
         "phpcompatibility/php-compatibility": "*"
