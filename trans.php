@@ -24,7 +24,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.6.1
+ * @version   0.7
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
@@ -130,6 +130,29 @@ function processValue($value)
 }
 
 /**
+ * Set style for inputfield
+ * - if key doesn't exists in translation -> border red
+ * - if translation and default are the same -> border orange
+ * - else -> border default
+ * 
+ * @param string $key         Array key.
+ * @param array  $translation Array containing translation.
+ * @param string $value       Default translation.
+ * 
+ * @return string
+ */
+function setStyle($key, $translation, $value)
+{
+    if (array_key_exists($key, $translation) && !empty($translation[$key])) {
+        if (processValue($translation[$key]) == $value) {
+            return 'border: 1px orange solid;';
+        }
+        return '';
+    }
+    return 'border: 1px red solid;';
+}
+
+/**
  * Display the default language and translation.
  * 
  * @param array  $default     Array containing every default translation.
@@ -147,20 +170,6 @@ function displayHTML(
     $prevKey = '', 
     $px = 0
 ) {
-    /**
-     * Changes border of input to red if no translation is found.
-     * 
-     * @var string
-     */
-    $empty = 'border: 1px red solid;';
-
-    /**
-     * Changes border of input to orange if translation is the same as default.
-     * 
-     * @var string
-     */
-    $same = 'border: 1px orange solid;';
-
     global $disable;
 
     //foreach key check if value is an array -> run function again with that array
@@ -176,20 +185,6 @@ function displayHTML(
         }
 
         $value = processValue($value);
-        $trans = '';
-        $style = $empty;
-
-        //if key doesn't exists in translation -> border red
-        //if translation and default are the same -> border orange
-        //else -> border default
-        if (array_key_exists($key, $translation) && !empty($translation[$key])) {
-            $trans = processValue($translation[$key]);
-            $style = '';
-
-            if ($trans == $value) {
-                $style = $same;
-            }
-        }
 
         echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\"
         type=\"text\" tabindex=\"-1\" value=\"$key\" $disable>\n\t";
@@ -201,7 +196,8 @@ function displayHTML(
             $key = $prevKey."|".$key;
         }
 
-        echo "<input style=\"margin:5px 0px 0px 0px; $style\" type=\"text\" 
+        echo "<input style=\"margin:5px 0px 0px 0px; ".
+            setStyle($key, $translation, $value)."\" type=\"text\" 
             name=\"$key\" value=\"$trans\" $disable><br>\n\t";
     }
 }
