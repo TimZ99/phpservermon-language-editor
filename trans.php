@@ -24,7 +24,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.7
+ * @version   0.7.1
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
@@ -130,10 +130,10 @@ function processValue($value)
 }
 
 /**
- * Set style for inputfield
- * - if key doesn't exists in translation -> border red
- * - if translation and default are the same -> border orange
- * - else -> border default
+ * Set style for input field:
+ * - if key doesn't exists in translation -> border red.
+ * - if translation and default are the same -> border orange.
+ * - else -> border default.
  * 
  * @param string $key         Array key.
  * @param array  $translation Array containing translation.
@@ -150,6 +150,22 @@ function setStyle($key, $translation, $value)
         return '';
     }
     return 'border: 1px red solid;';
+}
+
+/**
+ * Return translation value.
+ * 
+ * @param string $key         Array key.
+ * @param array  $translation Array containing translation.
+ * 
+ * @return string
+ */
+function translationValue($key, $translation)
+{
+    if (array_key_exists($key, $translation) && !empty($translation[$key])) {
+        return processValue($translation[$key]);
+    }
+    return '';
 }
 
 /**
@@ -191,14 +207,14 @@ function displayHTML(
         echo "<input style=\"margin:5px 12px 0px 0px;\" type=\"text\"
         tabindex=\"-1\" value=\"$value\" $disable>\n\t";
 
-        //if key is nested -> change key to main|nested
-        if ($prevKey != '') {
-            $key = $prevKey."|".$key;
-        }
+        //if key is nested -> name is main|nested
+        $name = ($prevKey != '') ? $prevKey."|".$key : $key;
 
         echo "<input style=\"margin:5px 0px 0px 0px; ".
             setStyle($key, $translation, $value)."\" type=\"text\" 
-            name=\"$key\" value=\"$trans\" $disable><br>\n\t";
+            name=\"".processValue($name)."\"
+            value=\"".translationValue($key, $translation)."\"
+            $disable><br>\n\t";
     }
 }
 
