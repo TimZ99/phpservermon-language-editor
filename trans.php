@@ -24,7 +24,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   0.6
+ * @version   0.6.1
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  * 
  * @todo menu to select the translation file
@@ -74,7 +74,7 @@ $files = scandir($path);
 $disable = "";
 
 //check if path is directory
-if (!$files) {
+if ($files === false) {
     trigger_error("Path $path is not a directory.", E_USER_ERROR);
 }
 //check if default lang exists
@@ -161,20 +161,6 @@ function displayHTML(
      */
     $same = 'border: 1px orange solid;';
 
-    /**
-     * Final value before echo. '' if no translation was found.
-     * 
-     * @var string
-     */
-    $trans = '';
-
-    /**
-     * Style of inputfield.
-     * 
-     * @var string
-     */
-    $style = '';
-
     global $disable;
 
     //foreach key check if value is an array -> run function again with that array
@@ -245,7 +231,7 @@ function saveTranslation()
             continue;
         }
         $main = substr($key, 0, $containsSub);
-        $sub = substr($key, $containsSub+1);
+        $sub = substr($key, $containsSub + 1);
         array_key_exists($main, $array) 
             ? $array[$main][$sub] = $value 
             : $array[$main] = array($sub => $value);
