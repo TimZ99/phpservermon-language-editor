@@ -20,9 +20,9 @@ It isn't really more than that!
 
 ### Prerequisites
 
-As this project is specifically made to maintain the translation files of PHP Server Monitor, you need PHP Server Monitor. https://github.com/phpservermon/phpservermon
+- As this project is specifically made to maintain the translation files of PHP Server Monitor, you need PHP Server Monitor. https://github.com/phpservermon/phpservermon
 
-As this project uses PHP, you need PHP installed.
+- PHP 4, 5 or 7 (preferred)
 
 ### Installing
 
@@ -34,9 +34,11 @@ As this project uses PHP, you need PHP installed.
 ## Development
 ### Running the tests
 
-- Run ```composer install --dev```.
-- Run ```./vendor/bin/phpcs -p trans.php --standard=PHPCompatibility --runtime-set testVersion 5.6```
-Change 5.6 to the version you want to test on.
+- Run ```composer install --dev```
+- Run ```./vendor/bin/phpcs trans.php```
+- Run ```./vendor/bin/phpcs trans.php --standard=PSR12```
+- Run ```./vendor/bin/phpcs -p trans.php --standard=PHPCompatibility --runtime-set testVersion 4.0-```
+- For any changes to the composer.json file run ```composer validate```
 
 ## Authors
 
