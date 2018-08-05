@@ -1,14 +1,25 @@
-dist: trusty
+sudo: false
 
 language: php
-php:
-  - nightly
 
-before_install:
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php: 7.1
+
+install:
   - composer self-update
-  - composer install --dev
+  - composer install --no-interaction
 
-script:
-  - vendor/bin/phpcs trans.php -n
-  - vendor/bin/phpcs trans.php --standard=PHPCompatibility --runtime-set testVersion 4.0-
-  - composer validate
+jobs:
+  include:
+    - stage: "Tests"
+      name: "PHP CodeSniffer"
+      script: vendor/bin/phpcs trans.php -n
+    - script: vendor/bin/phpcs trans.php --standard=PSR12 -n
+      name: "PHP CodeSniffer PSR12"
+    - script: vendor/bin/phpcs trans.php --standard=PHPCompatibility --runtime-set testVersion 4.0-
+      name: "PHP Compatibility"
+    - script: composer validate
+      name: "Composer"
