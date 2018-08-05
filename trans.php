@@ -5,7 +5,7 @@
  *
  * This file is part of PHP Server Monitor Language Editor (PSMLE).
  * PHP Server Monitor Language Editor is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License as 
+ * it and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with PHP Server Monitor.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * PHP versions 4, 5, 7 supported
  *
  * @category  PHP
@@ -24,9 +24,9 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   GIT: 0.7.2
+ * @version   GIT: 0.7.3
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
- * 
+ *
  * @todo menu to select the translation file
  * @todo Feature: export directly to Github
  **/
@@ -42,17 +42,17 @@ error_reporting(E_USER_ERROR);
 /**
  * Path to language directory.
  * Format: src/lang
- * 
+ *
  * @var string
- */ 
+ */
 $path = '../phpservermon-dev/src/lang';
 
 /**
  * Name of translation file.
  * Format: xx_XX.lang.php
- * 
+ *
  * @var string
- */ 
+ */
 $translationLang = 'nl_NL.lang.php';
 
 ///////////////////////////////////////
@@ -61,17 +61,17 @@ $translationLang = 'nl_NL.lang.php';
 
 /**
  * Get the names of the files in the directory.
- * 
+ *
  * @var array|boolean
- */ 
+ */
 $files = scandir($path);
 
 /**
  * Disable input field if the input can not be saved.
- * 
+ *
  * @var string
  */
-$disable = "";
+$disable = '';
 
 //check if path is directory
 if ($files === false) {
@@ -86,30 +86,30 @@ if (!in_array($translationLang, $files)) {
     trigger_error("$translationLang not found.", E_USER_ERROR);
 }
 //check if default lang file is readable
-if (!is_readable($path.'/en_US.lang.php')) {
+if (!is_readable($path . '/en_US.lang.php')) {
     trigger_error("Default lang file not readable.", E_USER_ERROR);
 }
 //check if translation file is readable
-if (!is_readable($path."/".$translationLang)) {
+if (!is_readable($path . "/" . $translationLang)) {
     trigger_error("$translationLang not readable.", E_USER_ERROR);
 }
 
 //get content of default lang
-require $path.'/en_US.lang.php';
+require $path . '/en_US.lang.php';
 /**
  * Containing all default translations.
  * Default: en_US.
- * 
+ *
  * @var array
  */
 $default = $sm_lang;
 unset($sm_lang);
 
 //get content of translated lang
-require $path."/".$translationLang;
+require $path . "/" . $translationLang;
 /**
  * Containing all translations from translation file.
- * 
+ *
  * @var array
  */
 $translation = $sm_lang;
@@ -117,9 +117,9 @@ unset($sm_lang);
 
 /**
  * Making sure the value won't break the file.
- * 
+ *
  * @param string $value Value to be processed.
- * 
+ *
  * @return string
  */
 function processValue($value)
@@ -134,11 +134,11 @@ function processValue($value)
  * - if key doesn't exists in translation -> border red.
  * - if translation and default are the same -> border orange.
  * - else -> border default.
- * 
+ *
  * @param string $key         Array key.
  * @param array  $translation Array containing translation.
  * @param string $value       Default translation.
- * 
+ *
  * @return string
  */
 function setStyle($key, $translation, $value)
@@ -154,10 +154,10 @@ function setStyle($key, $translation, $value)
 
 /**
  * Return translation value.
- * 
+ *
  * @param string $key         Array key.
  * @param array  $translation Array containing translation.
- * 
+ *
  * @return string
  */
 function translationValue($key, $translation)
@@ -170,20 +170,20 @@ function translationValue($key, $translation)
 
 /**
  * Display the default language and translation.
- * 
+ *
  * @param array  $default     Array containing every default translation.
- * @param array  $translation Array containing every translation for the 
+ * @param array  $translation Array containing every translation for the
  *                            translation file.
  * @param string $prevKey     Default ''. Otherwise previous key.
  * @param int    $px          Default 0. Left margin for input fields,
  *                            used for indentation.
- * 
+ *
  * @return null
- */ 
+ */
 function displayHTML(
-    $default, 
-    $translation, 
-    $prevKey = '', 
+    $default,
+    $translation,
+    $prevKey = '',
     $px = 0
 ) {
     global $disable;
@@ -194,7 +194,7 @@ function displayHTML(
         $key = processValue($key);
 
         if (is_array($value)) {
-            echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\"
+            echo "<input style=\"margin:5px 12px 0px " . $px . "px; width:15vw;\"
             tabindex=\"-1\" type=\"text\" value=\"$key\" $disable><br>\n\t";
             displayHTML($value, $translation[$key], $key, 24);
             continue;
@@ -202,18 +202,18 @@ function displayHTML(
 
         $value = processValue($value);
 
-        echo "<input style=\"margin:5px 12px 0px ".$px."px; width:15vw;\"
+        echo "<input style=\"margin:5px 12px 0px " . $px . "px; width:15vw;\"
         type=\"text\" tabindex=\"-1\" value=\"$key\" $disable>\n\t";
         echo "<input style=\"margin:5px 12px 0px 0px;\" type=\"text\"
         tabindex=\"-1\" value=\"$value\" $disable>\n\t";
 
         //if key is nested -> name is main|nested
-        $name = ($prevKey != '') ? $prevKey."|".$key : $key;
+        $name = ($prevKey != '') ? $prevKey . "|" . $key : $key;
 
-        echo "<input style=\"margin:5px 0px 0px 0px; ".
-            setStyle($key, $translation, $value)."\" type=\"text\" 
-            name=\"".processValue($name)."\"
-            value=\"".translationValue($key, $translation)."\"
+        echo "<input style=\"margin:5px 0px 0px 0px; " .
+            setStyle($key, $translation, $value) . "\" type=\"text\" 
+            name=\"" . processValue($name) . "\"
+            value=\"" . translationValue($key, $translation) . "\"
             $disable><br>\n\t";
     }
 }
@@ -221,10 +221,10 @@ function displayHTML(
 /**
  * Save translation.
  * Create array from input.
- * 
+ *
  * @todo   add option to show output using textarea
  * @return string
- */ 
+ */
 function saveTranslation()
 {
     $array = array();
@@ -244,10 +244,9 @@ function saveTranslation()
         }
         $main = substr($key, 0, $containsSub);
         $sub = substr($key, $containsSub + 1);
-        array_key_exists($main, $array) 
-            ? $array[$main][$sub] = $value 
+        array_key_exists($main, $array)
+            ? $array[$main][$sub] = $value
             : $array[$main] = array($sub => $value);
-        
     }
     $content = createContentForSave($array);
     return modifyFile($content);
@@ -257,16 +256,15 @@ function saveTranslation()
  * Change array to string.
  * Add license and documentation to content.
  * Make content ready to add to the translation file.
- * 
+ *
  * @param array $array Contains processed input.
- * 
+ *
  * @return string
  */
 function createContentForSave($array)
 {
     $content = "\$sm_lang = array(\n";
     foreach ($array as $key => $value) {
-        
         if (is_array($value)) {
             $content .= "\t'$key' => array(\n";
             foreach ($array[$key] as $nestedKey => $nestedValue) {
@@ -284,29 +282,29 @@ function createContentForSave($array)
 /**
  * Load changes to translation file.
  * Copy documentation and past the new translation under it.
- * 
+ *
  * @param string $newContent New content for file. Default set to prevent errors.
- * 
+ *
  * @return string
  */
 function modifyFile($newContent = '')
 {
     global $path;
     global $translationLang;
-    $currentContent = file_get_contents($path."/".$translationLang);
+    $currentContent = file_get_contents($path . "/" . $translationLang);
     $licenseAndDocs = substr(
-        $currentContent, 
-        0, 
+        $currentContent,
+        0,
         strpos($currentContent, '$sm_lang')
     );
-    file_put_contents($path."/".$translationLang, $licenseAndDocs.$newContent);
+    file_put_contents($path . "/" . $translationLang, $licenseAndDocs . $newContent);
     return "Success";
 }
 
 /**
  * Check if file is writable. (Currently required to save.)
  * Check if $_POST["submit"] isset.
- * 
+ *
  * @return string
  */
 function checkForSave()
@@ -314,16 +312,16 @@ function checkForSave()
     global $path;
     global $translationLang;
     global $disable;
-    $message = false; 
+    $message = false;
     $messageBox = "<div style=\"width:50vw; margin-left:25vw; padding:12px; 
         border:black 1px solid; border-radius:5px;\">";
 
-    if (!is_writable($path."/".$translationLang)) {
+    if (!is_writable($path . "/" . $translationLang)) {
         $message = true;
         $messageBox .= "<b style=\"color:red;\">File not writable.</b><br>
             Permission: "
-            .substr(sprintf('%o', fileperms($path."/".$translationLang)), -4)
-            .".<br>Should be 0666.<br>Unix: chmod 0666 $path.$translationLang";
+            . substr(sprintf('%o', fileperms($path . "/" . $translationLang)), -4)
+            . ".<br>Should be 0666.<br>Unix: chmod 0666 $path.$translationLang";
         $disable = "disabled";
     }
     if (isset($_POST["submit"])) {
@@ -392,10 +390,12 @@ function checkForSave()
             tabindex="-1" readonly>
         <br><br><br>
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <?php 
-        displayHTML($default, $translation); 
+        <?php
+        displayHTML($default, $translation);
         ?>
         <button type="submit" name="submit" value="1">Save translation</button>
         </form>
+    </body>
+</html> </form>
     </body>
 </html>
