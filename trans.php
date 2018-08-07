@@ -24,7 +24,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   GIT: 0.7.3
+ * @version   GIT: 0.7.4
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  *
  * @todo menu to select the translation file
@@ -321,7 +321,7 @@ function checkForSave()
         $messageBox .= "<b style=\"color:red;\">File not writable.</b><br>
             Permission: "
             . substr(sprintf('%o', fileperms($path . "/" . $translationLang)), -4)
-            . ".<br>Should be 0666.<br>Unix: chmod 0666 $path.$translationLang";
+            . ".<br>Should be 0666.<br>Unix: chmod 0666 $path/$translationLang";
         $disable = "disabled";
     }
     if (isset($_POST["submit"])) {
