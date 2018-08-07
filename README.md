@@ -7,15 +7,15 @@ The default language of PHP Server Monitor is English. All of the translations a
 
 ## Getting Started
 
-- Make sure that the file you're going to edit is writable. Permission of at least 0666 is required. 
-- Open the file in your browser, start editing and save your work.
-- Share your work [here](https://github.com/phpservermon/phpservermon/pull).
+- Edit config.php.
+- Open trans.php in your browser, start editing and save at the end.
+- Share your changes [here](https://github.com/phpservermon/phpservermon/pull).
 
 It isn't really more than that!
 
 **Friendly reminders:**
 - Change the permission of your language files back to 0644 after you're done.
-- User input is used unfiltered! It's *not* recommended to keep this file accessible for everyone.
+- User input is not filtered! It's *not* recommended to keep this trans.php accessible for everyone.
 
 
 ### Prerequisites
@@ -27,7 +27,8 @@ It isn't really more than that!
 ### Installing
 
 - Clone the repository to a server running PHP.
-- In trans.php:
+- Rename config.php.sample to config.php.
+- In config.php:
    - Change $path to your PHP Server Monitor language folder.
    - Change $translationLang to the file you want to edit.
 

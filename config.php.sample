@@ -1,0 +1,16 @@
+<?php
+/**
+ * Path to language directory.
+ * Format: src/lang
+ *
+ * @var string
+ */
+$path = '../phpservermon/src/lang';
+
+/**
+ * Name of translation file.
+ * Format: xx_XX.lang.php
+ *
+ * @var string
+ */
+$translationLang = 'nl_NL.lang.php';
