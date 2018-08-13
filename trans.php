@@ -24,7 +24,7 @@
  * @author    Tim Zandbergen <Tim@Xervion.nl>
  * @copyright 2018 Tim Zandbergen
  * @license   http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @version   GIT: 0.8.0
+ * @version   GIT: 0.8.1
  * @link      http://www.github.com/TimZ99/phpservermon-language-editor/
  *
  * @todo menu to select the translation file
@@ -36,8 +36,10 @@ ini_set('display_errors', 1);
 error_reporting(E_USER_ERROR);
 //error_reporting(E_ALL);
 
-// import settings
-require 'config.php';
+if (!is_readable('./config.php')) {
+    trigger_error("Config doesn't exist or is not readable.", E_USER_ERROR);
+}
+require './config.php';
 
 /**
  * Get the names of the files in the directory.
