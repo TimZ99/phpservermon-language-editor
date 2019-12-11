@@ -249,16 +249,17 @@ function createContentForSave($array)
     $content = "\$sm_lang = array(\n";
     foreach ($array as $key => $value) {
         if (is_array($value)) {
-            $content .= "\t'$key' => array(\n";
+            $content .= str_repeat(' ', 4) . "'" . $key . "' => array(\n";
             foreach ($array[$key] as $nestedKey => $nestedValue) {
-                $content .= "\t\t'$nestedKey' => '$nestedValue',\n";
+                $content .= str_repeat(' ', 8) . "'$nestedKey' => '" .
+                wordwrap($nestedValue, (120 - strlen($nestedKey) - 9 - 8), "\n ") . "',\n";
             }
-            $content .= "\t),\n";
+            $content .= str_repeat(' ', 4) . "),\n";
             continue;
         }
-        $content .= "\t'$key' => '$value',\n";
+        $content .= str_repeat(' ', 4) . "'" . $key . "' => '$value',\n";
     }
-    $content .= ");";
+    $content .= ");\n";
     return $content;
 }
 
