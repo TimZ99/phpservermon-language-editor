@@ -107,7 +107,7 @@ unset($sm_lang);
  */
 function processValue($value)
 {
-    $value = htmlspecialchars($value);
+    $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
     $value = preg_replace("/((\\')|(\'))/", "\'", $value);
     return $value;
 }
