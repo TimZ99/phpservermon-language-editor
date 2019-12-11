@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Server Monitor Language Editor
  * Helps to maintain the translations files of PHP Server Monitor.
@@ -107,7 +108,7 @@ unset($sm_lang);
 function processValue($value)
 {
     $value = htmlspecialchars($value);
-    $value = preg_replace("/([\']|['])(.*)([\']|['])/", "\'$2\'", $value);
+    $value = preg_replace("/((\\')|(\'))/", "\'", $value);
     return $value;
 }
 
