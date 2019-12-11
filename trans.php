@@ -61,11 +61,11 @@ if ($files === false) {
     trigger_error("Path $path is not a directory.", E_USER_ERROR);
 }
 //check if default lang exists
-if (!in_array('en_US.lang.php', $files)) {
+if (!in_array('en_US.lang.php', /** @scrutinizer ignore-type */ $files)) {
     trigger_error("Default lang en_US not found.", E_USER_ERROR);
 }
 //check if translation file exists
-if (!in_array($translationLang, $files)) {
+if (!in_array($translationLang, /** @scrutinizer ignore-type */ $files)) {
     trigger_error("$translationLang not found.", E_USER_ERROR);
 }
 //check if default lang file is readable
