@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with PHP Server Monitor.  If not, see <http://www.gnu.org/licenses/>.
  *
- * PHP versions 4, 5, 7 supported
+ * PHP versions 5, 7, 8 supported
  *
  * @category  PHP
  * @package   Phpservermon-Language-Editor
