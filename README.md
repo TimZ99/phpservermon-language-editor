@@ -19,7 +19,7 @@ It isn't really more than that!
 
 ### Prerequisites
 
-- As this project is specifically made to maintain the translation files of PHP Server Monitor, you need PHP Server Monitor. https://github.com/phpservermon/phpservermon
+- As this project is specifically made to maintain the translation files of PHP Server Monitor, you need PHP Server Monitor (version 3.x.x). https://github.com/phpservermon/phpservermon
 
 - PHP 5 (EOL), 7 (EOL) or 8 (preferred)
 
