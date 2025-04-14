@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-At this point the project works without versioning. Always use the latest version of the main branch.
+At this point the project works without versioning. Always use the latest version of the master branch.
 
 ## Reporting a Vulnerability
 
